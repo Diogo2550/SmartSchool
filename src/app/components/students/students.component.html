@@ -1,0 +1,117 @@
+<div class="row" *ngIf="!selectedStudent || selectedStudent.id !== 0">
+  <div [ngClass]="{'col-sm-8' : selectedStudent, 'col-sm-12' : !selectedStudent}">
+    <app-title [title]="title">
+      <button class="btn btn-success" (click)="newStudent()">Cadastrar Aluno</button>
+    </app-title>
+      
+      <table class="table table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Visualizar</th>
+          <th scope="col">#</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Sobrenome</th>
+          <th scope="col">Telefone</th>
+          <th scope="col">Opções</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of students">
+          <td scope="row">
+            <button (click)="selectStudent(student);" class="btn btn-sm btn-warning">Detalhe</button>
+          </td>
+          <td scope="row">{{ student.id }}</td>
+          <td scope="row">{{ student.name }}</td>
+          <td scope="row">{{ student.lastName }}</td>
+          <td scope="row">{{ student.phoneNumber }}</td>
+          <td scope="row">
+            <div class="btn-group">
+              <button class="btn btn-sm btn-outline-primary" (click)="openModal(template)">Professores</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteStudent(student.id)">Deletar</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>    
+  </div>
+  
+  <div *ngIf="selectedStudent" class="col-sm-4">
+  
+    <div class="row">
+      <div class="mr-auto">
+        <app-title [title]="'Cód. Aluno: ' + selectedStudent.id"></app-title>
+      </div>
+    </div>
+    
+    <form [formGroup]="studentForm" (submit)="studentSubmit()">
+      <div class="form-group">
+        <label for="formName">Name: </label>
+        <input type="text" class="form-control" id="formName" placeholder="Nome do aluno" formControlName="name">
+      </div>
+      <div class="form-group">
+        <label for="formSobrenome">Sobrenome: </label>
+        <input type="text" class="form-control" id="formSobrenome" placeholder="Sobrenome do aluno" formControlName="lastName">
+      </div>
+      <div class="form-group">
+        <label for="formTelefone">Telefone: </label>
+        <input type="text" class="form-control" id="formTelefone" placeholder="Telefone do aluno" formControlName="phoneNumber">
+      </div>
+      <hr>
+      <div class="row">
+        <div class="mr-auto ml-3">
+          <button class="btn btn-danger" (click)="deselectStudent();">Voltar</button>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary mr-3" [disabled]="!studentForm.valid">Atualizar</button>
+        </div>
+      </div>
+      
+    </form>
+  
+  </div>
+
+</div>
+
+<div *ngIf="selectedStudent && selectedStudent.id === 0" class="col-sm-12">
+  
+  <div class="row">
+    <div class="mr-auto">
+      <app-title [title]="'Cadastrar novo aluno!'"></app-title>
+    </div>
+  </div>
+  
+  <form [formGroup]="studentForm" (submit)="studentSubmit()">
+    <div class="form-group">
+      <label for="formName">Name: </label>
+      <input type="text" class="form-control" id="formName" placeholder="Nome do aluno" formControlName="name">
+    </div>
+    <div class="form-group">
+      <label for="formSobrenome">Sobrenome: </label>
+      <input type="text" class="form-control" id="formSobrenome" placeholder="Sobrenome do aluno" formControlName="lastName">
+    </div>
+    <div class="form-group">
+      <label for="formTelefone">Telefone: </label>
+      <input type="text" class="form-control" id="formTelefone" placeholder="Telefone do aluno" formControlName="phoneNumber">
+    </div>
+    <hr>
+    <div class="row">
+      <div class="mr-auto ml-3">
+        <button class="btn btn-outline-danger" (click)="deselectStudent();">Voltar</button>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary mr-3" [disabled]="!studentForm.valid">Criar</button>
+      </div>
+    </div>
+    
+  </form>
+
+</div>
+
+<ng-template #template>
+  <div class="modal-body">
+    <app-teachers></app-teachers>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary pull-right" aria-label="Close" (click)="modalRef.hide()">Fechar</button>
+  </div>
+</ng-template>
